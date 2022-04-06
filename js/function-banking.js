@@ -20,6 +20,7 @@ const second = doubleIt(7);
 */
 
 function getInputValue(inputid) {
+    debugger;
     const inputField = document.getElementById(inputid);
     const inputAmountText = inputField.value;
     const amountValue = parseFloat(inputAmountText);
@@ -36,11 +37,25 @@ function updateTotalField(totalFieldId, amount) {
     totalElement.innerText = previousTotal + amount;
 }
 
-function updateBalance(amount, isAdd) {
+
+// get current balance
+function getCurrentBalance() {
     const balanceTotal = document.getElementById('balance-total');
     const balanceTotalText = balanceTotal.innerText;
     const previousBalanceTotal = parseFloat(balanceTotalText);
+    return previousBalanceTotal;
+}
+
+
+function updateBalance(amount, isAdd) {
+
+    const balanceTotal = document.getElementById('balance-total');
+    /*
+    const balanceTotalText = balanceTotal.innerText;
+    const previousBalanceTotal = parseFloat(balanceTotalText);
+    */
     // balanceTotal.innerText = previousBalanceTotal + depositAmount;
+    const previousBalanceTotal = getCurrentBalance();
     if (isAdd == true) {
         balanceTotal.innerText = previousBalanceTotal + amount;
     }
@@ -57,7 +72,6 @@ document.getElementById('deposit-button').addEventListener('click', function () 
     const depositAmountText = depositInput.value;
     const depositAmount = parseFloat(depositAmountText);
     */
-    const depositAmount = getInputValue('deposit-input');
 
 
     // get and update deposit total
@@ -67,7 +81,6 @@ document.getElementById('deposit-button').addEventListener('click', function () 
     const previousDepositTotal = parseFloat(depositTotalText);
     depositTotal.innerText = previousDepositTotal + depositAmount;
     */
-    updateTotalField('deposit-total', depositAmount);
 
 
     // update balance
@@ -77,7 +90,14 @@ document.getElementById('deposit-button').addEventListener('click', function () 
     const previousBalanceTotal = parseFloat(balanceTotalText);
     balanceTotal.innerText = previousBalanceTotal + depositAmount;
     */
-    updateBalance(depositAmount, true);
+
+    const depositAmount = getInputValue('deposit-input');
+    if (depositAmount > 0) {
+        updateTotalField('deposit-total', depositAmount);
+        updateBalance(depositAmount, true);
+
+    }
+
 
 });
 
@@ -91,7 +111,8 @@ document.getElementById('withdraw-button').addEventListener('click', function ()
     const withdrawAmountText = withdrawInput.value;
     const withdrawAmount = parseFloat(withdrawAmountText);
     */
-    const withdrawAmount = getInputValue('withdraw-input');
+
+
 
     // get and update withdraw total
     /*
@@ -100,7 +121,6 @@ document.getElementById('withdraw-button').addEventListener('click', function ()
     const previousWithdrawTotal = parseFloat(previousWithdrawTotalText);
     withdrawTotal.innerText = previousWithdrawTotal + withdrawAmount;
     */
-    updateTotalField('withdraw-total', withdrawAmount);
 
 
 
@@ -111,6 +131,15 @@ document.getElementById('withdraw-button').addEventListener('click', function ()
     const previousBalanceTotal = parseFloat(balanceTotalText);
     balanceTotal.innerText = previousBalanceTotal - withdrawAmount;
     */
-    updateBalance(withdrawAmount, false);
+
+    const withdrawAmount = getInputValue('withdraw-input');
+    const currentBalance = getCurrentBalance()
+    if (withdrawAmount > 0 && withdrawAmount < currentBalance) {
+        updateTotalField('withdraw-total', withdrawAmount);
+        updateBalance(withdrawAmount, false);
+    }
+    if (withdrawAmount > currentBalance) {
+        console.log('tomar account a ja ase tar besi tulte parbana');
+    }
 
 });
